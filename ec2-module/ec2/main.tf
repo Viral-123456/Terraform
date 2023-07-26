@@ -48,11 +48,12 @@ resource "aws_instance" "ec2" {
   #count = var.instance_count
   ami   = data.aws_ami.ubuntu.id
   instance_type = var.instance_type
-  associate_public_ip_address = true
+  # associate_public_ip_address = true
   subnet_id = data.aws_subnet.publicsubnet-vpc.id
   #subnet_id = data.aws_subnet.privatesubnet-vpc.id
-  #subnet_id = "var.ispublic"
-  count = var.ispublic == true ? 1 : 0
+  #count = var.ispublic == true ? 1 : 0  
+  #count = var.ispublic ? 1 : 0
+  count = var.ispublic ? var.instance_count : 0
   vpc_security_group_ids = [data.aws_security_group.vpc_sg.id]
   tags = {
     Name = "ec2"
@@ -65,11 +66,12 @@ resource "aws_instance" "ec21" {
   #count = var.instance_count
   ami   = data.aws_ami.ubuntu.id
   instance_type = var.instance_type
-  associate_public_ip_address = false
+  # associate_public_ip_address = false
   #subnet_id = data.aws_subnet.publicsubnet-vpc.id
   subnet_id = data.aws_subnet.privatesubnet-vpc.id
-  count = var.isprivate == true ? 1 : 0
-  #subnet_id = "var.ispublic"
+  #count = var.isprivate == true ? 1 : 0
+  #count = var.ispublic ? 0 : 1 
+  count = var.ispublic ? 0 : var.instance_count  
   vpc_security_group_ids = [data.aws_security_group.vpc_sg.id]
   tags = {
     Name = "ec2"
