@@ -1,0 +1,40 @@
+
+/var/lib/jenkins/secrets/initialAdminPassword
+
+
+
+52f36a18d0f8485c8278ed83799766bc
+
+
+http://3.110.103.195:8080/
+
+http://3.110.103.195:8080/
+
+1150ceb11c613c8a3c348c2145cb511683
+
+
+11212776b953a91167f47d98fca92f99df
+
+
+/var/lib/jenkins/workspace/node-project
+
+
+rsync -avh /var/lib/jenkins/workspace/node-project root@172.31.9.52://home/ubuntu/node/
+
+
+sudo apt install nodejs -y
+
+sudo apt install npm -y
+
+npm install -y
+
+node app.js -y
+
+
+sudo apt install nodejs
+
+sudo apt install npm
+
+npm install
+
+node app.js

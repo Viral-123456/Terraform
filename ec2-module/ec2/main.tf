@@ -1,31 +1,31 @@
 
+
+# data "aws_vpc" "new_vpc" {
+#   id = var.vpc_id
+# }
+
 data "aws_vpc" "new_vpc" {
-  filter {
+   filter {
     name   = "tag:Name"
     values = ["vpc"]
   }
+
 }
 
 data "aws_subnet" "publicsubnet-vpc" {
-    filter {
-    name   = "tag:Name"
-    values = ["pub-sub1"]
-  }
+  id = var.publicsubnet-vpc
 }
 
 data "aws_subnet" "privatesubnet-vpc" {
-    filter {
-    name   = "tag:Name"
-    values = ["pr-sub2"]
-  }
+  id = var.privatesubnet-vpc
+
 }
 
 data "aws_security_group" "vpc_sg" {
-      filter {
-    name   = "tag:Name"
-    values = ["vpc-sg"]
-  }
+  id = var.vpc_sg
+
 }
+
 
 data "aws_ami" "ubuntu" {
   most_recent = true

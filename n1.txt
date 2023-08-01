@@ -1,0 +1,221 @@
+
+
+variable "subnet_ids" {
+  type    = list(string)
+  default = ["aws_subnet.pub1-sub-vpc1.id","aws_subnet.pub2-sub-vpc1.id","aws_subnet.pr1-sub-vpc1.id","aws_subnet.pr2-sub-vpc1.id"]
+}
+
+
+===============
+for ec2
+
+subnet_id = aws_subnet.sub[count.index].id
+
+tags = {
+  count = length(var.ec2_name)
+  Name = var.ec2_name[count.index]
+}
+
+==
+subnet
+==
+
+
+resour "aws_subnet" "pub-sub-vpc1" {
+ count = length(var.sn_cidr)
+ vpc_id = aws_vpc.vpc1.id
+ map_public_ip_on_launch = var.map_public_ip_on_launch[count.index
+ cidr_block = var.sn_cidr[caount.index]
+ tags = {
+   count = length(var.sn_name)
+   Name = var.sn_name[count.index]
+ }
+}
+
+========
+variable
+====
+
+variable "sn_cidr" {
+  type = list(string)
+  default = ["10.0.1.0/24","10.0.2.0/24"]
+}
+
+variable "map_public_ipp_on_launch" {
+  description = "Public_IP"
+  type = list(string)
+  default = ["true","false"]
+}
+
+
+variabe "ec2_name"{
+  type = list(string)
+  default = ["ec2-vpc1","ec2-vpc2"]
+}
+
+variable "vpc_cidr" {
+  type = string
+  default = "10.0.0.0/16"
+}
+
+
+variable "sn_name" {
+  type = list(string)
+  default = ["public","private"]
+}
+
+
+
+data "aws_security_group" "vpc1-sg" {
+  id = "sg-aws_security_group.vpc1-sg.id"  
+}
+resource "aws_instance" "ec2-vpc1" {
+  ami           = "ami-08e5424edfe926b43"
+  instance_type = "t2.micro"
+  associate_public_ip_address = true  
+  vpc_security_group_ids = [data.aws_security_group.vpc1-sg.id]
+  
+  tags = {
+    Name = "vpc-1-ec2"
+  }
+
+}
+
+
+
+# ec2
+resource "aws_instance" "ec2-vpc1" {
+  ami           = "ami-08e5424edfe926b43"
+  instance_type = "t2.micro"
+  associate_public_ip_address = true
+
+  # Reference the security group directly, without .id
+  vpc_security_group_ids = [aws_security_group.vpc1-sg.id]
+
+  tags = {
+    Name = "vpc-1-ec2"
+  }
+}
+
+
+# ec2
+data "aws_security_group" "vpc1-sg" {
+  id = aws_security_group.vpc1-sg.id  # Use interpolation without the "aws_security_group" prefix
+}
+
+resource "aws_instance" "ec2-vpc1" {
+  ami           = "ami-08e5424edfe926b43"
+  instance_type = "t2.micro"
+  associate_public_ip_address = true
+  
+  # Use the data source to get the security group ID
+  vpc_security_group_ids = [data.aws_security_group.vpc1-sg.id]
+  
+  tags = {
+    Name = "vpc-1-ec2"
+  }
+}
+===================
+
+
+
+
+# vpc
+resource "aws_vpc" "vpc1" {
+  cidr_block       = "10.0.0.0/16"
+  instance_tenancy = "default"
+
+  tags = {
+    Name = "vpc1"
+  }
+}
+
+# pub-subnet
+resource "aws_subnet" "pub1-sub-vpc1" {
+  vpc_id     = aws_vpc.vpc1.id
+  cidr_block = "10.0.1.0/24"
+  availability_zone = "ap-south-1a"
+
+  tags = {
+    Name = "pub1-sub-vpc1"
+  }
+}
+
+# igw
+resource "aws_internet_gateway" "vpc1-igw" {
+  vpc_id = aws_vpc.vpc1.id
+
+  tags = {
+    Name = "vpc1-igw"
+  }
+}
+
+# route table
+resource "aws_route_table" "pub1-rt-vpc1" {
+    vpc_id = aws_vpc.vpc1.id
+
+    route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.vpc1-igw.id
+  }
+
+    tags = {
+        Name = "pub1-route-vpc1"
+    }
+}
+
+
+# route table association
+resource "aws_route_table_association" "pub1-rt-association" {
+  subnet_id      = aws_subnet.pub1-sub-vpc1.id
+  route_table_id = aws_route_table.pub1-rt-vpc1.id
+}
+
+
+# security group
+resource "aws_security_group" "vpc1-sg" {
+  vpc_id      = aws_vpc.vpc1.id
+
+  ingress {
+    description      = "TLS from VPC"
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
+  tags = {
+    Name = "vpc1-sg"
+  }
+}
+
+========================
+
+
+# ec2
+resource "aws_instance" "ec2-vpc1" {
+  ami           = "ami-08e5424edfe926b43"
+  instance_type = "t2.micro"
+  subnet_id                   = "aws_subnet.pub1-sub-vpc1.id"
+  vpc_security_group_ids      = ["aws_security_group.vpc1-sg.id"]
+  associate_public_ip_address = true  
+
+   tags = {
+    Name = "vpc-1-ec2"
+  }
+}
+
+
+output "instance_public_ip" {
+  description = "Public IP address of the EC2 instance"
+  value       = aws_instance.ec2-vpc1.public_ip
+}

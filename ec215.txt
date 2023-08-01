@@ -1,0 +1,33 @@
+# ec2
+
+#data
+data "aws_vpc" "vpc1" {
+  id = "vpc-0248290a2d3dc9a0c"
+}
+
+data "aws_subnet" "pub1-sub-vpc1" {
+  id = "subnet-03b08aa2bdabf979a"
+}
+
+data "aws_security_group" "selected" {
+  id = "sg-048c581f01dd5c9e7"
+}
+
+#ec2 resources
+resource "aws_instance" "ec2-vpc1" {
+  ami           = "ami-08e5424edfe926b43"
+  instance_type = "t2.micro"
+  subnet_id                   = "subnet-03b08aa2bdabf979a"
+  vpc_security_group_ids      = ["sg-048c581f01dd5c9e7"]
+  associate_public_ip_address = true  
+
+   tags = {
+    Name = "vpc-1-ec2"
+  }
+}
+
+
+output "instance_public_ip" {
+  description = "Public IP address of the EC2 instance"
+  value       = aws_instance.ec2-vpc1.public_ip
+}

@@ -63,7 +63,7 @@ variable "pub-rt2-cidr" {
 
 
 
-variable "pr1-rt1-cidr" {
-  type = string
-}
+#variable "pr1-rt1-cidr" {
+  #type = string
+#}
 

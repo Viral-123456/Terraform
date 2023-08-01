@@ -26,9 +26,9 @@ variable "pr-sub1" {
 
 }
 
-variable "pr1-rt1-cidr" {
-  type = string
-}
+#variable "pr1-rt1-cidr" {
+  #type = string
+#}
 
 
 variable "pr-sub2" {

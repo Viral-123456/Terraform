@@ -1,0 +1,33 @@
+how to add sll in iis 
+
+==========
+
+To add an SSL certificate in Internet Information Services (IIS), follow these steps:
+
+1. Obtain the SSL Certificate: Before you begin, make sure you have obtained an SSL certificate from a trusted Certificate Authority (CA) or through your organization's internal certificate management process.
+
+2. Install the SSL Certificate: Double-click the certificate file (usually in .pfx or .p12 format) to start the Certificate Import Wizard. Select "Local Machine" as the certificate store and follow the prompts to import the certificate.
+
+3. Open IIS Manager: Open the "Internet Information Services (IIS) Manager" on your server. You can do this by searching for "IIS Manager" in the Start menu or using the "inetmgr" command in the Run dialog (Windows Key + R).
+
+4. Select the Server: In the left-hand pane of IIS Manager, click on the server node (your computer name) to display the server-level features in the middle pane.
+
+5. Open Server Certificates: Double-click on "Server Certificates" in the middle pane. This will show a list of SSL certificates installed on the server.
+
+6. Import the SSL Certificate: Click on "Import..." in the Actions pane on the right-hand side. The "Certificate Import Wizard" will appear.
+
+7. Select the Certificate: Browse and select the SSL certificate you imported in step 2. Enter the password if you set one during the certificate import.
+
+8. Configure SSL Binding: After importing the certificate, go back to the "Internet Information Services (IIS) Manager" and select the website you want to secure with SSL from the left-hand pane.
+
+9. Add HTTPS Binding: In the right-hand pane, click on "Bindings...". Click "Add..." to add a new binding.
+
+10. Choose HTTPS: In the "Add Site Binding" window, select "https" as the "Type".
+
+11. Select SSL Certificate: Choose the SSL certificate you imported from the drop-down list under "SSL certificate".
+
+12. Specify IP and Port: If you have multiple IP addresses or want to use a specific one, choose the IP address from the drop-down list. For most cases, you can leave it as "All Unassigned". Specify the port as "443" (default for HTTPS).
+
+13.Save and Apply: Click "OK" to save the binding and apply the changes.
+
+Your website is now configured with SSL. Users can access your website securely using "https://" in the URL, and the SSL certificate will encrypt the data transmitted between the server and the clients. Always remember to keep your SSL certificates up to date and properly secured.

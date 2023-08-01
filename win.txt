@@ -1,0 +1,107 @@
+
+windows host path
+C:\Windows\System32\drivers\etc\hosts
+
+
+192.168.43.119		www.fisrtweb.com
+
+main onfiguration file path 
+%SystemRoot%\System32\inetsrv\config\applicationHost.config
+
+
+for download nodejs and npm
+
+https://nodejs.org/en/download
+
+to verify
+node -v
+npm -v
+
+
+
+
+============================
+
+application pool
+---------------
+
+In Internet Information Services (IIS), an application pool is a container that hosts one or more web applications. It is a fundamental concept that plays a crucial role in the way IIS handles web requests and manages web applications on a server.
+
+Here's a simple explanation of what an application pool is and why it's important:
+
+Container for Web Applications: An application pool acts as a container that holds one or more web applications. These applications can be separate websites or different parts of the same website.
+
+Process Isolation: Each application pool runs as a separate process in the Windows operating system. This process isolation provides a level of security and stability, ensuring that if one application encounters issues or crashes, it won't affect other applications running in different application pools. This way, web applications are somewhat isolated from each other.
+
+Resource Management: Each application pool can have its own set of resource limits, such as CPU usage, memory consumption, and request queue length. This allows administrators to allocate resources based on the needs of specific applications, preventing one resource-intensive application from affecting the performance of others.
+
+Automatic Recycling: Application pools have an automatic recycling feature that periodically restarts the worker process. This helps free up resources and prevent potential memory leaks or performance degradation over time.
+
+Application Pool Identity: Each application pool can run under a specific user account, known as the application pool identity. This identity is used for running the web applications in that pool and accessing resources like files or databases. The application pool identity allows administrators to control the permissions and access rights of the applications.
+
+=== Overall, application pools provide an efficient and secure way to host multiple web applications on a single IIS server. They offer process isolation, resource management, and automatic recycling, ensuring better stability, security, and performance for web hosting environments.
+
+
+============================
+
+Website mapping
+--------------
+
+Website mapping in IIS can be explained in an easy way as follows:
+
+Think of an IIS server as a large apartment building with many apartments (websites) inside it. Each apartment has its own unique address (domain name or IP address) and a door number (port number). When someone wants to visit a specific apartment (website), they need to know the correct address and door number.
+
+In the same way, website mapping in IIS is like providing the correct address and door number to ensure that when a user types a domain name or IP address in their web browser, the request is directed to the correct website on the server.
+
+To achieve this:
+
+1. Binding: You configure bindings for each website, which include the address (domain name or IP address) and door number (port number) associated with that website.
+
+2. Matching: When a request comes in, IIS checks the bindings of all the websites on the server to find a match for the request's address and port number.
+
+3. Routing: Once IIS finds the matching website based on the address and port, it directs the request to the content or application associated with that website, just like someone following the address and door number to reach the correct apartment.
+
+By using website mapping, IIS ensures that each website operates independently and serves the right content without interfering with other websites on the same server, similar to how each apartment in the building has its own space and privacy.
+
+============================
+
+iis configuration
+----------------
+
+Configuring Internet Information Services (IIS) can be simplified into the following easy steps. Please note that these steps are meant as a basic guide and may vary depending on your specific requirements and IIS version:
+
+Install IIS: Open "Control Panel" > "Programs" > "Turn Windows features on or off." Check the box next to "Internet Information Services" and click "OK" to install IIS.
+
+Create a Website: Open IIS Manager by searching for "Internet Information Services (IIS) Manager" in the Start menu. Right-click on "Sites" and select "Add Website." Provide a name, set the physical path to your website files, and specify the hostname (domain name) and port.
+
+Configure Application Pool: IIS automatically creates an application pool for the new website. However, you can create additional application pools with specific settings if needed. Right-click on "Application Pools" in IIS Manager, select "Add Application Pool," and provide a name and optional settings.
+
+Assign Website to Application Pool: In the "Basic Settings" of your website (right-click on the website and choose "Manage Website" > "Advanced Settings"), select the appropriate application pool from the drop-down list.
+
+Test Website: Open a web browser and enter your website's hostname or IP address. If everything is configured correctly, you should see your website's content.
+
+Configure Additional Settings: Depending on your website's requirements, you may need to configure additional settings in IIS, such as SSL certificates, URL rewriting rules, authentication methods, and MIME types. These can be managed through various features in IIS Manager.
+
+Security Considerations: Ensure proper security measures, such as restricting access to sensitive directories, setting appropriate permissions, enabling firewalls, and regularly applying updates to the server and applications
+
+Monitoring and Logging: Configure logging and monitoring options in IIS to track website activity and troubleshoot issues effectively.
+
+Always consider best practices and security guidelines when configuring IIS to ensure a reliable and secure web hosting environment. If you are new to IIS, it's a good idea to refer to official documentation and online tutorials for more in-depth guidance.
+
+======
+
+
+In Internet Information Services (IIS), the configuration is managed through XML-based configuration files. These files store various settings and options for IIS and its components. The main configuration file for IIS is the "applicationHost.config" file, and there are other configuration files for specific settings and features.
+
+applicationHost.config: This is the primary configuration file for IIS and is located at the following path:
+
+%SystemRoot%\System32\inetsrv\config\applicationHost.config
+
+The "applicationHost.config" file contains the global configuration settings for IIS, including server-level settings, default behavior for all sites and applications, and definitions for various IIS modules and components.
+
+Web.config: Each web application hosted in IIS can have its own "Web.config" file. This file is typically located in the root directory of the web application. It contains settings specific to the application and can override or supplement the settings defined in the "applicationHost.config" file. The "Web.config" file is hierarchical, allowing for granular configuration at the application level.
+
+
+
+
+

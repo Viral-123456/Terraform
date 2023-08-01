@@ -1,0 +1,337 @@
+resource "aws_route_table" "pub-route-vpc1" {
+    vpc_id = aws_vpc.vpc-1.id
+
+    route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw-1.id
+  }
+
+    tag = {
+        Name = "pub-route-vpc1"
+    }
+}
+
+=======================
+
+output
+
+output "instance_public_ip" {
+  description = "Public IP address of the EC2 instance"
+  value       = aws_instance.ec2-vpc1.public_ip
+}
+
+
+output "instance_id" {
+  description = "ID of the EC2 instance"
+  value       = aws_instance.app_server.id
+}
+
+
+output "list_of_az" {
+  value = aws_subnet.main[*].availability_zone
+}
+
+=============
+
+map_public_ip_on_launch = "true"
+
+=============
+
+#new data
+data "aws_vpc" "vpc" {
+  id = var.vpc_id
+  
+}
+
+data "aws_subnet" "publicsubnet-vpc" {
+  id = var.subnet_id
+}
+
+data "aws_security_group" "vpc-sg" {
+  id = var.security_group_id
+}
+
+
+    vpc_id = 
+    subnet_id = 
+    security_group_id = 
+
+==========================
+
+
+#new date
+variable "vpc_id" {
+  type = string
+}
+
+variable "subnet_id" {
+  type = string
+}
+
+variable "security_group_id" {
+  type = string
+}
+
+=================================
+  subnet_id = data.aws_subnet.publicsubnet-vpc.id
+  vpc_security_group_ids = [data.aws_security_group.vpc_sg.id]
+
+=================================
+
+    subnet_id = "subnet-0b959bac9465165bb"
+    vpc_security_group_ids = ["sg-0b99ced3408ad7016"]
+
+
+=================================
+
+data "aws_vpc" "new_vpc" {
+  filter {
+    name   = "tag:Name"
+    values = ["vpc"]
+  }
+}
+
+data "aws_subnet" "publicsubnet-vpc" {
+    filter {
+    name   = "tag:Name"
+    values = ["pu-sub1"]
+  }
+}
+
+data "aws_security_group" "vpc_sg" {
+      filter {
+    name   = "tag:Name"
+    values = ["vpc-sg"]
+  }
+}
+
+=================================
+
+variable "subnet_id" {
+    type = string
+  
+}
+
+variable "vpc_security_group_ids" {
+    type = set(string)
+  
+}
+
+
+aws_subnet
+
+========================================
+
+security_group_name = "vpc-sg"
+
+new-data
+========================
+data "aws_ami" "ubuntu" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  }
+
+
+
+removed data
+=============
+
+variable "ami" {
+    type = string
+}
+
+
+ami = "ami-006935d9a6773e4ec"
+ami = var.ami
+
+
+===
+
+variable "instance_create" {
+  type = bool
+  default = ["true","false"]
+}
+
+
+isPublic="true"
+
+========================
+
+variable "env" {
+  default "prod"
+}
+
+count = "${var.env == "prod" ? 1 : 0]"
+
+variable "ispublic" {
+  default "prod"
+}
+
+count = "${var.env == "prod" ? true : false]"
+
+count = var.ispublic == true ? 1 : 0
+
+count = var.isprivate == true ? 1 : 0
+
+======
+
+condition ? true_isprivate  false_ispublic
+
+
+============================
+
+variable "isprod" {
+  type = pool
+  default = false
+}
+
+we can change default value in variable according to requirement
+
+
+resource "aws_instance" "ec2" {
+  count = (var.isprod) ? 2 : 1
+  ami = "ami-v6695cdmcs"
+  instance_type = "t2.micro"
+
+
+=====================
+
+count = "${var.ispublic == true ? 1 : 0}"
+count = "${var.isprivate == true ? 1 : 0}"
+ 
+
+condition = var.isprivate == false 
+
+============================
+
+# data "aws_vpc" "new_vpc" {
+#   filter {
+#     name   = "tag:Name"
+#     values = ["vpc"]
+#   }
+# }
+
+
+data "aws_vpc" "new_vpc" {
+  filter {
+    name   = "tag:Name"
+    values = ["vpc"]
+  }
+}
+
+
+data "aws_subnet" "publicsubnet-vpc" {
+    filter {
+    name   = "tag:Name"
+    values = ["pub-sub1"]
+  }
+}
+
+
+
+data "aws_subnet" "privatesubnet-vpc" {
+    filter {
+    name   = "tag:Name"
+    values = ["pr-sub2"]
+  }
+}
+
+data "aws_security_group" "vpc_sg" {
+      filter {
+    name   = "tag:Name"
+    values = ["vpc-sg"]
+  }
+}
+
+data "aws_ami" "ubuntu" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  }
+
+    filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["099720109477"] 
+}
+
+
+data "aws_ami" "ubuntu" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  }
+
+    filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["099720109477"] 
+}
+
+
+resource "aws_instance" "ec2" {
+  #count = var.instance_count
+  ami   = data.aws_ami.ubuntu.id
+  instance_type = var.instance_type
+  # associate_public_ip_address = true
+  subnet_id = data.aws_subnet.publicsubnet-vpc.id
+  #subnet_id = data.aws_subnet.privatesubnet-vpc.id
+  #count = var.ispublic == true ? 1 : 0  
+  #count = var.ispublic ? 1 : 0
+  count = var.ispublic ? var.instance_count : 0
+  vpc_security_group_ids = [data.aws_security_group.vpc_sg.id]
+  tags = {
+    Name = "ec2"
+  }
+}
+
+#new data########
+
+resource "aws_instance" "ec21" {
+  #count = var.instance_count
+  ami   = data.aws_ami.ubuntu.id
+  instance_type = var.instance_type
+  # associate_public_ip_address = false
+  #subnet_id = data.aws_subnet.publicsubnet-vpc.id
+  subnet_id = data.aws_subnet.privatesubnet-vpc.id
+  #count = var.isprivate == true ? 1 : 0
+  #count = var.ispublic ? 0 : 1 
+  count = var.ispublic ? 0 : var.instance_count  
+  vpc_security_group_ids = [data.aws_security_group.vpc_sg.id]
+  tags = {
+    Name = "ec2"
+  }
+}
+
+===============
+I took leave on 24th and 25th July due to eye infection after Mayur sir's approval.
+
+===================
+node project
+https://www.youtube.com/watch?v=nplH3BzKHPk
+
+https://github.com/LondheShubham153/node-todo-cicd/blob/master/views/todo.ejs
+
+===========================
+
+
+create jenkins pipeline for node js app and node js app is deploy on ubuntu server
+
+
+
+
+
+
+
+

@@ -4,6 +4,7 @@ module "ec2" {
     #ami = "data.aws_ami.ubuntu.id"
     instance_count = var.instance_count
     instance_type = var.instance_type
+    #subnet_name = var.subnet_name
     ispublic = var.ispublic
     #isprivate = var.isprivate
    
